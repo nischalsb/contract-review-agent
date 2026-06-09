@@ -7,10 +7,8 @@ import { sessionOptions, SessionData } from "@/lib/auth"
 
 export async function POST(request: NextRequest) {
   try {
-    // 1. Get email and password from request body
     const { email, password } = await request.json()
 
-    // 2. Validate inputs
     if (!email || !password) {
       return NextResponse.json(
         { error: "Email and password are required" },
@@ -18,7 +16,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 3. Check if user exists
     const user = await db.user.findUnique({
       where: { email },
     })
@@ -30,7 +27,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 4. Compare password against hash
     const passwordMatch = await bcrypt.compare(password, user.passwordHash)
 
     if (!passwordMatch) {
@@ -40,9 +36,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 5. Create session
     const session = await getIronSession<SessionData>(
-      await cookies(),
+      await cookies() as any,
       sessionOptions
     )
 

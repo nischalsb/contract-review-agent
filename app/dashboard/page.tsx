@@ -5,10 +5,10 @@ import { sessionOptions, SessionData } from "@/lib/auth"
 import Link from "next/link"
 
 export default async function DashboardPage() {
-  const session = await getIronSession<SessionData>(
-    await cookies(),
-    sessionOptions
-  )
+    const session = await getIronSession<SessionData>(
+        await cookies() as any,
+        sessionOptions
+      )
 
   if (!session.isLoggedIn) {
     redirect("/login")
